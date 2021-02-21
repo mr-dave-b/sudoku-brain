@@ -16,10 +16,9 @@ public class LoadPuzzle
                     string line = sr.ReadLine();
                     var rowCells = new Cell[9];
                     
-                    //Group buildRow = new Group
                     for (int col = 0; col < 9; col++)
                     {
-                        rowCells[col] = new Cell(line[col]);
+                        rowCells[col] = new Cell(line[col], row+1, col+1);
                     }
                     rows[row] = new Group(rowCells);
                 }

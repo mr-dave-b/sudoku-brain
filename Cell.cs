@@ -4,9 +4,10 @@ using System.Linq;
 
 public class Cell
 {
-    private char[] allValues = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-    public Cell(char initialValue)
+    public Cell(char initialValue, int row, int col)
     {
+        Col = col;
+        Row = row;
         if (int.TryParse(initialValue.ToString(), out _))
         {
             Value = initialValue;
@@ -15,7 +16,7 @@ public class Cell
         }
         else
         {
-            Candidates = new HashSet<char>(allValues);
+            Candidates = new HashSet<char>(Constants.AllValues);
             Value = '.';
         }
     }
@@ -26,11 +27,19 @@ public class Cell
 
     public char Value { get; set; }
 
+    public int Row { get; private set;}
+
+    public int Col { get; private set;}
+
     public HashSet<char> Candidates { get; set; }
 
     public bool EliminateCandidates(IEnumerable<char> values)
     {
         bool somethingRemoved = false;
+        if (Given || Filled)
+        {
+            return somethingRemoved;
+        }
         foreach (var value in values)
         {
             if (Candidates.Contains(value))
@@ -50,6 +59,6 @@ public class Cell
     {
         Filled = true;
         Value = candidate;
-        Console.WriteLine("Filled in a " + candidate + "!");
+        Console.WriteLine($"Filled in a {candidate} at {Col},{Row}!");
     }
 }

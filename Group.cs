@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 public class Group
 {
-        private char[] allValues = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-
         private Cell[] _cells = new Cell[9];
 
         public Group(Cell[] initialCells)
@@ -62,7 +60,7 @@ public class Group
             }
 
             // Check for numbers that are only candidates in 1 place
-        foreach (var candidate in allValues)
+        foreach (var candidate in Constants.AllValues)
             {
                     int count = 0;
                     foreach (var cell in _cells)

@@ -18,7 +18,36 @@ public class Puzzle
         return null;
     }
 
-    public int NumbersFilledIn => _numbersFilledIn;
+    public int NumbersFilledIn
+    {
+        get
+        {
+            int filledIn = 0;
+            foreach(var row in _allRows)
+            {
+                for (var col = 1; col <=9; col++)
+                {
+                    if (row.GetCell(col).Filled)
+                    {
+                        filledIn++;
+                    }
+                }
+            }
+            return filledIn;
+        }
+    }
+
+    public bool ApplyAllStrats()
+    {
+        bool progress = false;
+        progress = CheckAllGroups() || progress;
+
+        // Look at each box and find candidates that are restricted to a row or column
+        var strat = new BoxLineReductionStrategy();
+        progress = strat.Apply(this) || progress;
+
+        return progress;
+    }
 
     // Returns true so long as some progress has been made
     public bool CheckAllGroups()
@@ -55,20 +84,8 @@ public class Puzzle
     public Group GetBox(int box)
     {
         var boxCells = new Cell[9];
-        int rowOffset;
-        if (box > 6)
-        {
-            rowOffset = 6;
-        }
-        else if (box > 3)
-        {
-            rowOffset = 3;
-        }
-        else
-        {
-            rowOffset = 0;
-        }
-        int colOffset = 3*((box-1) % 3);
+        int rowOffset = Helpers.GetRowOffset(box);
+        int colOffset = Helpers.GetColOffset(box);
         for (int row = 1; row <= 3; row++)
         {
             var rowData = GetRow(row + rowOffset);

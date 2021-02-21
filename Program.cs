@@ -12,9 +12,16 @@ namespace sudoku_brain
 
             puzzle.WriteToConsole();
 
-            while (puzzle.CheckAllGroups())
+            int previousNumberFilledIn = 0;
+            while (puzzle.ApplyAllStrats())
             {
-                puzzle.WriteToConsole();
+                int currentNumberFilledIn = puzzle.NumbersFilledIn;
+                if (currentNumberFilledIn > previousNumberFilledIn)
+                {
+                    puzzle.WriteToConsole();
+                }
+
+                previousNumberFilledIn = currentNumberFilledIn;
             }
         }
     }
