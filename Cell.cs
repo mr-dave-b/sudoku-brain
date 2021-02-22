@@ -31,7 +31,21 @@ public class Cell
 
     public int Col { get; private set;}
 
-    public HashSet<char> Candidates { get; set; }
+    public HashSet<char> Candidates { get; private set; }
+
+    public bool SetOnlyCandidates(IEnumerable<char> values)
+    {
+        if (Given || Filled)
+        {
+            return false;
+        }
+        if (Candidates.SetEquals(values))
+        {
+            return false;
+        }
+        Candidates = new HashSet<char>(values);
+        return true;
+    }
 
     public bool EliminateCandidates(IEnumerable<char> values)
     {

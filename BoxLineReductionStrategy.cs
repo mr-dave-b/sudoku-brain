@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public class BoxLineReductionStrategy
@@ -36,7 +37,8 @@ public class BoxLineReductionStrategy
                 {
                     if (cellNumbers.Count == 1)
                     {
-                        Console.WriteLine($"BoxLineReductionStrategy: Something not good in box {boxNum}...");
+                        Console.WriteLine($"BoxLineReductionStrategy problem: {candidate} only in cell {cellNumbers.First()} in box {boxNum} :(");
+                        continue;
                     }
                     if (cellNumbers.IsSubsetOf(topRow))
                     {

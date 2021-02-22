@@ -4,14 +4,18 @@ using System.Collections.Generic;
 public class Group
 {
         private Cell[] _cells = new Cell[9];
+        private string _description;
 
-        public Group(Cell[] initialCells)
+        public Group(Cell[] initialCells, string description)
         {
                 for (int i = 0; i < 9; i++)
                 {
                         _cells[i] = initialCells[i];
                 }
+                _description = description;
         }
+
+        public string Description => _description;
 
         public Cell GetCell(int cellNum)
         {

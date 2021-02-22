@@ -8,7 +8,7 @@ namespace sudoku_brain
         {
             var loader = new LoadPuzzle();
 
-            var puzzle = loader.LoadFromInputTxt("input2.txt");
+            var puzzle = loader.LoadFromInputTxt("input.txt");
 
             puzzle.WriteToConsole();
 
@@ -20,7 +20,11 @@ namespace sudoku_brain
                 {
                     puzzle.WriteToConsole();
                 }
-
+                if (currentNumberFilledIn == 81)
+                {
+                    Console.WriteLine("All Done :)");
+                    return;
+                }
                 previousNumberFilledIn = currentNumberFilledIn;
             }
         }

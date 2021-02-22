@@ -20,7 +20,7 @@ public class LoadPuzzle
                     {
                         rowCells[col] = new Cell(line[col], row+1, col+1);
                     }
-                    rows[row] = new Group(rowCells);
+                    rows[row] = new Group(rowCells, $"row {row+1}");
                 }
                 
                 // Read the stream as a string, and write the string to the console.

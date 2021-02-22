@@ -3,7 +3,6 @@ using System;
 public class Puzzle
 {
     private Group[] _allRows = new Group[9];
-    private int _numbersFilledIn = 0;
 
     public Puzzle(Group[] initialRows)
     {
@@ -37,14 +36,44 @@ public class Puzzle
         }
     }
 
+    // Applying strategies until some progress is made, then we should go round again
     public bool ApplyAllStrats()
     {
         bool progress = false;
-        progress = CheckAllGroups() || progress;
+        progress = CheckAllGroups();
+        if (progress)
+        {
+            return progress;
+        }
 
         // Look at each box and find candidates that are restricted to a row or column
         var strat = new BoxLineReductionStrategy();
         progress = strat.Apply(this) || progress;
+        if (progress)
+        {
+            return progress;
+        }
+
+        var strat2 = new NakedPairsStrategy();
+        progress = strat2.Apply(this) || progress;
+        if (progress)
+        {
+            return progress;
+        }
+
+        var strat3 = new HiddenPairsStrategy();
+        progress = strat3.Apply(this) || progress;
+        if (progress)
+        {
+            return progress;
+        }
+
+        var strat4 = new HiddenTripletsStrategy();
+        progress = strat4.Apply(this) || progress;
+        if (progress)
+        {
+            return progress;
+        }
 
         return progress;
     }
@@ -78,7 +107,7 @@ public class Puzzle
         {
             colCells[row-1] = GetRow(row).GetCell(column);
         }
-        return new Group(colCells);
+        return new Group(colCells, $"column {column}");
     }  
 
     public Group GetBox(int box)
@@ -94,7 +123,7 @@ public class Puzzle
                 boxCells[(3*(row-1)) + col - 1] = rowData.GetCell(col + colOffset);
             }
         }
-        return new Group(boxCells);
+        return new Group(boxCells, $"box {box}");
     }
 
     public void WriteToConsole()
