@@ -1,8 +1,11 @@
 using System;
 using System.Linq;
 
-public class NakedPairsStrategy
+public class NakedPairsStrategy : IStrategy
 {
+    public string Name => "Naked Pairs Strategy";
+
+    public int SkillLevel => 4;
     public bool Apply(Puzzle puzzle)
     {
         bool progress = false;
@@ -42,7 +45,7 @@ public class NakedPairsStrategy
                     if (secondCellData.Candidates.SetEquals(firstCellData.Candidates))
                     {
                         bool pairProgress = false;
-                        // This is a naked pair - remove all other candidates!
+                        // This is a naked pair - remove candidates from all other cells!
                         for (int cellNum = 1; cellNum <= 9; cellNum++)
                         {
                             if (cellNum == firstCell || cellNum == secondCell)

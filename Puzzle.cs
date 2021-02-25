@@ -1,7 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 public class Puzzle
 {
+    private List<IStrategy> _strategies = new List<IStrategy>
+    {
+        new SimpleElimination(),
+        new HiddenSinglesStrategy(),
+        new BoxLineReductionStrategy(),
+        new NakedPairsStrategy(),
+        new HiddenPairsStrategy(),
+        new NakedTripletsStrategy(),
+        new HiddenTripletsStrategy()
+    };
+
     private Group[] _allRows = new Group[9];
 
     public Puzzle(Group[] initialRows)
@@ -36,64 +48,65 @@ public class Puzzle
         }
     }
 
+    public void EndSolutionStats()
+    {
+        int difficulty = 0;
+        Console.WriteLine("Successful strategies applied:");
+        foreach(var strat in UsedStrats)
+        {
+            difficulty += strat.SkillLevel;
+            Console.WriteLine($"{strat.Name} ({strat.SkillLevel})");
+        }
+        Console.Write($"Difficulty: {difficulty}");
+        if (NumbersFilledIn == 81)
+        {
+            Console.WriteLine();
+            Console.WriteLine("All Done :)");
+        }
+        else
+        {
+            Console.WriteLine("+");
+            Console.WriteLine("Ran out of ideas :/");
+        }
+    }
+
     // Applying strategies until some progress is made, then we should go round again
     public bool ApplyAllStrats()
     {
-        bool progress = false;
-        progress = CheckAllGroups();
-        if (progress)
+        foreach (var strat in _strategies)
         {
-            return progress;
+            if (strat.Apply(this))
+            {
+                if (!UsedStrats.Contains(strat))
+                {
+                    UsedStrats.Add(strat);
+                }
+                if (!Validate())
+                {
+                    throw new Exception("Quitting because validation failed");
+                }
+                return true;
+            }
         }
-
-        // Look at each box and find candidates that are restricted to a row or column
-        var strat = new BoxLineReductionStrategy();
-        progress = strat.Apply(this) || progress;
-        if (progress)
-        {
-            return progress;
-        }
-
-        var strat2 = new NakedPairsStrategy();
-        progress = strat2.Apply(this) || progress;
-        if (progress)
-        {
-            return progress;
-        }
-
-        var strat3 = new HiddenPairsStrategy();
-        progress = strat3.Apply(this) || progress;
-        if (progress)
-        {
-            return progress;
-        }
-
-        var strat4 = new HiddenTripletsStrategy();
-        progress = strat4.Apply(this) || progress;
-        if (progress)
-        {
-            return progress;
-        }
-
-        return progress;
+        return false;
     }
 
-    // Returns true so long as some progress has been made
-    public bool CheckAllGroups()
+    public bool Validate()
     {
-        bool progress = false;
-        // Iterate each row, column and box, eliminating candidates that are already filled in
+        bool valid = true;
         for (int num = 1; num < 10; num++)
         {
             var group = GetRow(num);
-            progress = group.RemoveCandidates() || progress;
+            valid = group.IsValid() && valid;
             group = GetColumn(num);
-            progress = group.RemoveCandidates() || progress;
+            valid = group.IsValid() && valid;
             group = GetBox(num);
-            progress = group.RemoveCandidates() || progress;
+            valid = group.IsValid() && valid;
         }
-        return progress;
+        return valid;
     }
+
+    public List<IStrategy> UsedStrats {get;} = new List<IStrategy>();
 
     public Group GetRow(int row)
     {

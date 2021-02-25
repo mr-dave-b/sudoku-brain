@@ -20,4 +20,14 @@ public static class Helpers
     {
         return 3*((boxNumber-1) % 3);
     }
+
+    public static int Factorial(int number)
+    {
+        int result = 1;
+        while (number > 1)
+        {
+            result = result * number--;
+        }
+        return result;
+    }
 }

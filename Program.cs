@@ -8,11 +8,11 @@ namespace sudoku_brain
         {
             var loader = new LoadPuzzle();
 
-            var puzzle = loader.LoadFromInputTxt("input.txt");
+            var puzzle = loader.LoadFromInputTxt(args[0]);
 
             puzzle.WriteToConsole();
 
-            int previousNumberFilledIn = 0;
+            int previousNumberFilledIn = puzzle.NumbersFilledIn;
             while (puzzle.ApplyAllStrats())
             {
                 int currentNumberFilledIn = puzzle.NumbersFilledIn;
@@ -22,11 +22,12 @@ namespace sudoku_brain
                 }
                 if (currentNumberFilledIn == 81)
                 {
-                    Console.WriteLine("All Done :)");
+                    puzzle.EndSolutionStats();
                     return;
                 }
                 previousNumberFilledIn = currentNumberFilledIn;
             }
+            puzzle.EndSolutionStats();
         }
     }
 }

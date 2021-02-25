@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Group
 {
@@ -39,66 +40,40 @@ public class Group
                 return result;
         }
 
-    internal bool RemoveCandidates()
+    internal bool IsValid()
     {
-            bool somethingRemoved = false;
-            var filledValues = new HashSet<char>();
+            var valid = true;
+            var candidates = new HashSet<char>();
+            var placed = new HashSet<char>();
             foreach (var cell in _cells)
             {
                     if (cell.Filled)
                     {
-                        filledValues.Add(cell.Value);
-                    }
-            }
-
-        // Remove filled in digits as candidates
-        foreach (var cell in _cells)
-            {
-                    if (!cell.Filled)
-                    {
-                            if (cell.EliminateCandidates(filledValues))
+                            if (placed.Contains(cell.Value))
                             {
-                                somethingRemoved = true;
+                                    Console.WriteLine($"{cell.Value} filled in more than once in {this.Description}!");
+                                    valid = false;
                             }
+                        placed.Add(cell.Value);
                     }
-            }
+                    else
+                    {
+                        candidates.UnionWith(cell.Candidates);
+                    }
 
-            // Check for numbers that are only candidates in 1 place
-        foreach (var candidate in Constants.AllValues)
+            }
+            placed.UnionWith(candidates);
+            var allNumbers = new HashSet<char>(Constants.AllValues);
+            foreach (var ch in placed)
             {
-                    int count = 0;
-                    foreach (var cell in _cells)
-                        {
-                                if (cell.Filled)
-                                {
-                                        if (cell.Value == candidate)
-                                        {
-                                                count = -1;
-                                                break;
-                                        }
-                                }
-                                else
-                                {
-                                        if (cell.Candidates.Contains(candidate))
-                                        {
-                                                count++;
-                                        }
-                                }
-                        }
-                        if (count == 1)
-                        {
-                                // We have a cell to fill in!
-                                foreach (var cell in _cells)
-                                {
-                                        if (!cell.Filled && cell.Candidates.Contains(candidate))
-                                        {
-                                                cell.FillIn(candidate);
-                                                break;
-                                        }
-                                }
-                        }
+                allNumbers.Remove(ch);
+            }
+            if (allNumbers.Count > 0)
+            {
+                Console.WriteLine($"{allNumbers.First()} is missing from {this.Description}!");
+                valid = false;
             }
 
-            return somethingRemoved;
+        return valid;
     }
 }

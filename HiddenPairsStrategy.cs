@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class HiddenPairsStrategy
+public class HiddenPairsStrategy : IStrategy
 {
+    public string Name => "Hidden Pairs Strategy";
+
+    public int SkillLevel => 5;
+
     public bool Apply(Puzzle puzzle)
     {
         bool progress = false;
@@ -23,7 +27,7 @@ public class HiddenPairsStrategy
     private bool CheckGroup(Group group)
     {
         bool progress = false;
-        // Get all the candidates in the group
+        // Get all the numbers not already filled in the group
         var candidates = new HashSet<char>(Constants.AllValues);
         for (int cell = 1; cell <= 9; cell++)
         {
@@ -35,11 +39,16 @@ public class HiddenPairsStrategy
         }
 
         // Iterate all pairs of possible candidates
-        Console.WriteLine($"Hidden pairs: searching in {group.Description} with {candidates.Count*(candidates.Count-1)} pair combos");
-        foreach (var candidate1 in candidates)
+        var candidatesList = new List<char>(candidates);
+        int combos = Helpers.Factorial(candidates.Count) / (2 * Helpers.Factorial(candidates.Count-2));
+        //Console.WriteLine($"Hidden pairs: searching in {group.Description} with {combos} pair combos");
+        for (var i=0; i<candidatesList.Count-1; i++)
         {
-            foreach (var candidate2 in candidates.Where(x => x != candidate1))
+            var candidate1 = candidatesList[i];
+            for (var j=i+1; j<candidatesList.Count; j++)
             {
+                var candidate2 = candidatesList[j];
+
                 // Find all cells containing both of the candidates
                 var rejected = false;
                 var inCells = new List<int>();

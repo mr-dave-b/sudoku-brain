@@ -73,6 +73,7 @@ public class Cell
     {
         Filled = true;
         Value = candidate;
+        Candidates = null;
         Console.WriteLine($"Filled in a {candidate} at {Col},{Row}!");
     }
 }

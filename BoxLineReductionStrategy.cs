@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-public class BoxLineReductionStrategy
+public class BoxLineReductionStrategy : IStrategy
 {
+    public string Name => "Box line reduction strategy";
+    public int SkillLevel => 3;
     private static int[] topRow = {1, 2, 3};
     private static int[] middleRow = {4, 5, 6};
     private static int[] bottomRow = {7, 8, 9};
@@ -33,13 +35,8 @@ public class BoxLineReductionStrategy
                         cellNumbers.Add(cellNum);
                     }
                 }
-                if (cellNumbers.Count > 0)
+                if (cellNumbers.Count == 2 || cellNumbers.Count == 3)
                 {
-                    if (cellNumbers.Count == 1)
-                    {
-                        Console.WriteLine($"BoxLineReductionStrategy problem: {candidate} only in cell {cellNumbers.First()} in box {boxNum} :(");
-                        continue;
-                    }
                     if (cellNumbers.IsSubsetOf(topRow))
                     {
                         if (RemoveCandidatesFromRow(puzzle, 1, rowOffset, colOffset, candidate, boxNum))
@@ -93,7 +90,7 @@ public class BoxLineReductionStrategy
             if (boxProgress)
             {
                 // Re-check all candidates before moving on to the next box
-                puzzle.CheckAllGroups();
+                //puzzle.CheckAllGroups();
                 progress = true;
             }
         }
