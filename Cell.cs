@@ -35,7 +35,7 @@ public class Cell
 
     public bool SetOnlyCandidates(IEnumerable<char> values)
     {
-        if (Given || Filled)
+        if (Filled)
         {
             return false;
         }
@@ -50,21 +50,38 @@ public class Cell
     public bool EliminateCandidates(IEnumerable<char> values)
     {
         bool somethingRemoved = false;
-        if (Given || Filled)
+        if (!Filled)
         {
-            return somethingRemoved;
-        }
-        foreach (var value in values)
-        {
-            if (Candidates.Contains(value))
+            foreach (var value in values)
             {
-                Candidates.Remove(value);
-                somethingRemoved = true;
+                if (Candidates.Contains(value))
+                {
+                    Candidates.Remove(value);
+                    somethingRemoved = true;
+                }
             }
         }
         if (Candidates.Count == 1)
         {
             FillIn(Candidates.First());
+        }
+        return somethingRemoved;
+    }
+
+    public bool EliminateCandidate(char value)
+    {
+        bool somethingRemoved = false;
+        if (!Filled)
+        {
+            if (Candidates.Contains(value))
+            {
+                Candidates.Remove(value);
+                somethingRemoved = true;
+                if (Candidates.Count == 1)
+                {
+                    FillIn(Candidates.First());
+                }
+            }
         }
         return somethingRemoved;
     }

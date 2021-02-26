@@ -18,7 +18,11 @@ public class Group
 
         public string Description => _description;
 
-        public Cell GetCell(int cellNum)
+    public IEnumerable<char> Candidates => _cells.Where(c => !c.Filled).SelectMany(c => c.Candidates).Distinct();
+
+    public IEnumerable<char> FilledIn => _cells.Where(c => c.Filled).Select(c => c.Value);
+
+    public Cell GetCell(int cellNum)
         {
                 return _cells[cellNum-1];
         }

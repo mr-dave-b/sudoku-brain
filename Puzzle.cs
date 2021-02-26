@@ -7,6 +7,7 @@ public class Puzzle
     {
         new SimpleElimination(),
         new HiddenSinglesStrategy(),
+        new PointingCandidatesStrategy(),
         new BoxLineReductionStrategy(),
         new NakedPairsStrategy(),
         new HiddenPairsStrategy(),
