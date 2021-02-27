@@ -39,11 +39,16 @@ public class Cell
         {
             return false;
         }
-        if (Candidates.SetEquals(values))
+        var oldCount = Candidates.Count;
+        Candidates.IntersectWith(values);
+        if (oldCount == Candidates.Count)
         {
             return false;
         }
-        Candidates = new HashSet<char>(values);
+        if (Candidates.Count == 1)
+        {
+            FillIn(Candidates.First());
+        }
         return true;
     }
 

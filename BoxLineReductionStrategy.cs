@@ -114,18 +114,21 @@ public class BoxLineReductionStrategy : IStrategy
                             if (boxCell.EliminateCandidate(candidate))
                             {
                                 boxProgress = true;
-                                if (isColumn)
-                                {
-                                    Console.WriteLine($"Box line reduction win: {candidate}s all in a column in box {boxNum}");
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"Box line reduction win: {candidate}s all in a row in box {boxNum}");
-                                }
                             }
                         }
                     }
-                    progress = progress || boxProgress;
+                    if (boxProgress)
+                    {
+                        progress = true;
+                        if (isColumn)
+                        {
+                            Console.WriteLine($"Box line reduction win: {candidate}s all in a column in box {boxNum}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Box line reduction win: {candidate}s all in a row in box {boxNum}");
+                        }
+                    }
                 }
             }
         }

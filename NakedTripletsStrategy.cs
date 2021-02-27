@@ -7,9 +7,12 @@ public class NakedTripletsStrategy : IStrategy
     public string Name => "Naked Triplets Strategy";
 
     public int SkillLevel => 6;
+
+    private int _searchCombos = 0;
     
     public bool Apply(Puzzle puzzle)
     {
+        _searchCombos = 0;
         bool progress = false;
         // Iterate each row, column and box, looking for 3 cells that contain only 3 candidates
         for (int num = 1; num < 10; num++)
@@ -21,30 +24,21 @@ public class NakedTripletsStrategy : IStrategy
             group = puzzle.GetBox(num);
             progress = CheckGroup(group) || progress;
         }
+        Console.WriteLine($"Naked triplets: Searched {_searchCombos} group/triplet combos");
         return progress;
     }
 
     private bool CheckGroup(Group group)
     {
-        bool progress = false;
-        // Get all remaining candidates in the group
-        var candidates = new HashSet<char>(Constants.AllValues);
-        for (int cell = 1; cell <= 9; cell++)
-        {
-            var cellData = group.GetCell(cell);
-            if (cellData.Given || cellData.Filled)
-            {
-                candidates.Remove(cellData.Value);
-            }
-        }
+        bool progress = false;   
 
-        var candidatesList = new List<char>(candidates);
-
+        var candidatesList = new List<char>(group.Candidates);
         if (candidatesList.Count >= 3)
         {
             // Iterate all possible triplets
-            int combos = Helpers.Factorial(candidates.Count) / (Helpers.Factorial(3) * Helpers.Factorial(candidates.Count-3));
-            Console.WriteLine($"Naked triplets: searching in {group.Description} with {combos} triplet combos");
+            int combos = Helpers.Factorial(candidatesList.Count) / (Helpers.Factorial(3) * Helpers.Factorial(candidatesList.Count-3));
+            //Console.WriteLine($"Naked triplets: searching in {group.Description} with {combos} triplet combos");
+            _searchCombos += combos;
             for (var i=0; i<candidatesList.Count-2; i++)
             {
                 var candidate1 = candidatesList[i];
@@ -112,7 +106,7 @@ public class NakedTripletsStrategy : IStrategy
                             }
                             if (tripletProgress)
                             {
-                                Console.WriteLine($"Naked triplet helps us: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                                Console.WriteLine($"Naked triplet: {candidate1}{candidate2}{candidate3} in {group.Description}");
                                 progress = true;
                             }
                         }

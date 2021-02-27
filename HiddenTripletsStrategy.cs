@@ -7,6 +7,8 @@ public class HiddenTripletsStrategy : IStrategy
     public string Name => "Hidden Triplets Strategy";
 
     public int SkillLevel => 7;
+
+    private int _searchCombos = 0;
     
     public bool Apply(Puzzle puzzle)
     {
@@ -21,30 +23,21 @@ public class HiddenTripletsStrategy : IStrategy
             group = puzzle.GetBox(num);
             progress = CheckGroup(group) || progress;
         }
+        Console.WriteLine($"Hidden triplets: Searched {_searchCombos} group/triplet combos");
         return progress;
     }
 
     private bool CheckGroup(Group group)
     {
         bool progress = false;
-        // Get all remaining candidates in the group
-        var candidates = new HashSet<char>(Constants.AllValues);
-        for (int cell = 1; cell <= 9; cell++)
-        {
-            var cellData = group.GetCell(cell);
-            if (cellData.Given || cellData.Filled)
-            {
-                candidates.Remove(cellData.Value);
-            }
-        }
 
-        var candidatesList = new List<char>(candidates);
-
+        var candidatesList = new List<char>(group.Candidates);
         if (candidatesList.Count >= 3)
         {
             // Iterate all triples of possible candidates
-            int combos = Helpers.Factorial(candidates.Count) / (Helpers.Factorial(3) * Helpers.Factorial(candidates.Count-3));
-            Console.WriteLine($"Hidden triplets: searching in {group.Description} with {combos} triplet combos");
+            int combos = Helpers.Factorial(candidatesList.Count) / (Helpers.Factorial(3) * Helpers.Factorial(candidatesList.Count-3));
+            _searchCombos += combos;
+            //Console.WriteLine($"Hidden triplets: searching in {group.Description} with {combos} triplet combos");
             for (var i=0; i<candidatesList.Count-2; i++)
             {
                 var candidate1 = candidatesList[i];
@@ -100,16 +93,14 @@ public class HiddenTripletsStrategy : IStrategy
                             foreach (var cellNum in inCells)
                             {
                                 var cellData = group.GetCell(cellNum);
-                                var currentCandidateCount = cellData.Candidates.Count;
-                                cellData.Candidates.IntersectWith(tripleValues);
-                                if (cellData.Candidates.Count < currentCandidateCount)
+                                if (cellData.SetOnlyCandidates(tripleValues))
                                 {
                                     exposeProgress = true;
                                 }
                             }
                             if (exposeProgress)
                             {
-                                Console.WriteLine($"Hidden triplet exposed: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                                Console.WriteLine($"Hidden triplet: {candidate1}{candidate2}{candidate3} in {group.Description}");
                                 progress = true;
                             }
                         }
