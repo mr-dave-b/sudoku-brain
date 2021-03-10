@@ -13,6 +13,7 @@ public class HiddenTripletsStrategy : IStrategy
     public bool Apply(Puzzle puzzle)
     {
         bool progress = false;
+        _searchCombos = 0;
         // Iterate each row, column and box, looking for 3 candidates that are only in 3 cells
         for (int num = 1; num < 10; num++)
         {

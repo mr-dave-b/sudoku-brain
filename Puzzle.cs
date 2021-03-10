@@ -12,7 +12,9 @@ public class Puzzle
         new NakedPairsStrategy(),
         new HiddenPairsStrategy(),
         new NakedTripletsStrategy(),
-        new HiddenTripletsStrategy()
+        new HiddenTripletsStrategy(),
+        new XWingStrategy(),
+        new SwordfishStrategy()
     };
 
     private Group[] _allRows = new Group[9];
