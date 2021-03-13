@@ -32,5 +32,5 @@ jobs:
       with:
         app-name: 'sudoku-brain'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_969622596dbb4b009597a4c97dab9e6c }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3124628dc3194cfb82bd24c12870dcb1 }}
         package: ${{env.DOTNET_ROOT}}/myapp 
