@@ -1,30 +1,34 @@
 using System;
 using System.Collections.Generic;
+using SudokuBrain.Services;
 
 public class Puzzle
 {
-    private List<IStrategy> _strategies = new List<IStrategy>
-    {
-        new SimpleElimination(),
-        new HiddenSinglesStrategy(),
-        new PointingCandidatesStrategy(),
-        new BoxLineReductionStrategy(),
-        new NakedPairsStrategy(),
-        new HiddenPairsStrategy(),
-        new NakedTripletsStrategy(),
-        new HiddenTripletsStrategy(),
-        new XWingStrategy(),
-        new SwordfishStrategy()
-    };
+    private readonly List<IStrategy> _strategies;
+    private readonly Group[] _allRows = new Group[9];
+    private readonly IMessageLogger _logger;
 
-    private Group[] _allRows = new Group[9];
-
-    public Puzzle(Group[] initialRows)
+    public Puzzle(Group[] initialRows, IMessageLogger logger)
     {
         for (int i = 0; i < 9; i++)
         {
             _allRows[i] = initialRows[i];
         }
+        _logger = logger;
+        
+        _strategies = new List<IStrategy>
+        {
+            new SimpleElimination(),
+            new HiddenSinglesStrategy(),
+            new PointingCandidatesStrategy(_logger),
+            new BoxLineReductionStrategy(_logger),
+            new NakedPairsStrategy(_logger),
+            new HiddenPairsStrategy(_logger),
+            new NakedTripletsStrategy(_logger),
+            new HiddenTripletsStrategy(_logger),
+            new XWingStrategy(_logger),
+            new SwordfishStrategy(_logger)
+        };
     }
 
     public Cell GetCell(int column, int row)
@@ -51,25 +55,24 @@ public class Puzzle
         }
     }
 
-    public void EndSolutionStats()
+    public void EndSolutionStats(IMessageLogger logger)
     {
         int difficulty = 0;
-        Console.WriteLine("Successful strategies applied:");
         foreach(var strat in UsedStrats)
         {
             difficulty += strat.SkillLevel;
-            Console.WriteLine($"{strat.Name} ({strat.SkillLevel})");
+            logger.Log(null, $"{strat.Name} ({strat.SkillLevel})");
+
         }
-        Console.Write($"Difficulty: {difficulty}");
         if (NumbersFilledIn == 81)
         {
-            Console.WriteLine();
-            Console.WriteLine("All Done :)");
+            logger.Log(null, $"Difficulty: {difficulty}");
+            logger.Log(null, "All Done :)");
         }
         else
         {
-            Console.WriteLine("+");
-            Console.WriteLine("Ran out of ideas :/");
+            logger.Log(null, $"Difficulty: {difficulty}+");
+            logger.Log(null, "Ran out of ideas :/", SudokuBrain.Models.LogItemLevel.Problem);
         }
     }
 
@@ -123,7 +126,7 @@ public class Puzzle
         {
             colCells[row-1] = GetRow(row).GetCell(column);
         }
-        return new Group(colCells, $"column {column}");
+        return new Group(colCells, $"column {column}", _logger);
     }  
 
     public Group GetBox(int box)
@@ -139,29 +142,29 @@ public class Puzzle
                 boxCells[(3*(row-1)) + col - 1] = rowData.GetCell(col + colOffset);
             }
         }
-        return new Group(boxCells, $"box {box}");
+        return new Group(boxCells, $"box {box}", _logger);
     }
 
-    public void WriteToConsole()
+    public void WriteGridAsText(IMessageLogger logger)
     {
         for (int row = 1; row <= 9; row++)
         {
             if ((row-1) % 3 == 0)
             {
-                Console.WriteLine("-------------");
+                logger.Log(null, "-------------");
             }
             var rowData = GetRow(row);
+            var msg = "";
             for (int col = 1; col <= 9; col++)
             {
                 if ((col-1) % 3 == 0)
                 {
-                    Console.Write("|");
+                    msg += "|";
                 }
-                Console.Write(rowData.GetCell(col).Value);
+                msg += rowData.GetCell(col).Value;
             }
-            
-            Console.WriteLine("|");
+            logger.Log(null, msg + "|");
         }
-        Console.WriteLine("-------------");
+        logger.Log(null, "-------------");
     }
 }

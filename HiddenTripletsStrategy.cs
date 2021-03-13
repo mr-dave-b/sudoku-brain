@@ -1,9 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class HiddenTripletsStrategy : IStrategy
 {
+    private readonly IMessageLogger _logger;
+
+    public HiddenTripletsStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
     public string Name => "Hidden Triplets Strategy";
 
     public int SkillLevel => 7;
@@ -24,7 +32,7 @@ public class HiddenTripletsStrategy : IStrategy
             group = puzzle.GetBox(num);
             progress = CheckGroup(group) || progress;
         }
-        Console.WriteLine($"Hidden triplets: Searched {_searchCombos} group/triplet combos");
+        _logger.Log(Name, $"Searched {_searchCombos} group/triplet combos");
         return progress;
     }
 
@@ -38,7 +46,7 @@ public class HiddenTripletsStrategy : IStrategy
             // Iterate all triples of possible candidates
             int combos = Helpers.Factorial(candidatesList.Count) / (Helpers.Factorial(3) * Helpers.Factorial(candidatesList.Count-3));
             _searchCombos += combos;
-            //Console.WriteLine($"Hidden triplets: searching in {group.Description} with {combos} triplet combos");
+            _logger.Log(Name, $"Searching in {group.Description} with {combos} triplet combos");
             for (var i=0; i<candidatesList.Count-2; i++)
             {
                 var candidate1 = candidatesList[i];
@@ -87,7 +95,7 @@ public class HiddenTripletsStrategy : IStrategy
                         }
                         if (inCells.Count == 3)
                         {
-                            //Console.WriteLine($"Triplet found: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                            _logger.Log(Name, $"Found {candidate1}{candidate2}{candidate3} in {group.Description}", SudokuBrain.Models.LogItemLevel.Debug);
                             // We found a triplet! If it is hidden, expose it
                             bool exposeProgress = false;
                             var tripleValues = new char[] {candidate1, candidate2, candidate3};
@@ -101,7 +109,7 @@ public class HiddenTripletsStrategy : IStrategy
                             }
                             if (exposeProgress)
                             {
-                                Console.WriteLine($"Hidden triplet: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                                _logger.Log(Name, $"{candidate1}{candidate2}{candidate3} in {group.Description}");
                                 progress = true;
                             }
                         }

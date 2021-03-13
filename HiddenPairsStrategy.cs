@@ -1,9 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class HiddenPairsStrategy : IStrategy
 {
+    private readonly IMessageLogger _logger;
+
+    public HiddenPairsStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
     public string Name => "Hidden Pairs Strategy";
 
     public int SkillLevel => 5;
@@ -41,7 +49,7 @@ public class HiddenPairsStrategy : IStrategy
         // Iterate all pairs of possible candidates
         var candidatesList = new List<char>(candidates);
         int combos = Helpers.Factorial(candidates.Count) / (2 * Helpers.Factorial(candidates.Count-2));
-        //Console.WriteLine($"Hidden pairs: searching in {group.Description} with {combos} pair combos");
+        // _logger.Log(Name, $"Hidden pairs: searching in {group.Description} with {combos} pair combos");
         for (var i=0; i<candidatesList.Count-1; i++)
         {
             var candidate1 = candidatesList[i];
@@ -95,7 +103,7 @@ public class HiddenPairsStrategy : IStrategy
                         var cellData = group.GetCell(cellNum);
                         if (cellData.SetOnlyCandidates(new char[] {candidate1, candidate2}))
                         {
-                            Console.WriteLine($"Hidden pairs: hidden pair {candidate1}{candidate2} exposed in {group.Description}");
+                            _logger.Log(Name, $"Hidden pairs: hidden pair {candidate1}{candidate2} exposed in {group.Description}");
                             // Re-check all candidates before moving on to the next group
                             //puzzle.CheckAllGroups();
                             progress = true;

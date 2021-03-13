@@ -1,9 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class XWingStrategy : IStrategy
 {
+    private readonly IMessageLogger _logger;
+
+    public XWingStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
     public string Name => "X-Wing Strategy";
 
     public int SkillLevel => 8;
@@ -80,11 +88,11 @@ public class XWingStrategy : IStrategy
                             int cellPos2 = firstLineCandidates[candidate].cell2;
                             if (columnsSearch)
                             {
-                                Console.WriteLine($"XWing? {candidate} in cols {firstLineNum}, {secondLineNum} rows {cellPos1}, {cellPos2}");
+                                _logger.Log(Name, $"? {candidate} in cols {firstLineNum}, {secondLineNum} rows {cellPos1}, {cellPos2}");
                             }
                             else
                             {
-                                Console.WriteLine($"XWing? {candidate} in rows {firstLineNum}, {secondLineNum} cols {cellPos1}, {cellPos2}");
+                                _logger.Log(Name, $"? {candidate} in rows {firstLineNum}, {secondLineNum} cols {cellPos1}, {cellPos2}");
                             }                            
 
                             // Eliminate any other instances of candidate from the 2 perpendicular lines
@@ -119,12 +127,12 @@ public class XWingStrategy : IStrategy
                             {
                                 if (line1Progress)
                                 {
-                                    Console.WriteLine($"XWing removed {candidate}s in row {cellPos1}");
+                                    _logger.Log(Name, $"Removed {candidate}s in row {cellPos1}");
                                     progress = true;
                                 }
                                 if (line2Progress)
                                 {
-                                    Console.WriteLine($"XWing removed {candidate}s in row {cellPos2}");
+                                    _logger.Log(Name, $"Removed {candidate}s in row {cellPos2}");
                                     progress = true;
                                 }  
                             }
@@ -132,12 +140,12 @@ public class XWingStrategy : IStrategy
                             {
                                 if (line1Progress)
                                 {
-                                    Console.WriteLine($"XWing removed {candidate}s in col {cellPos1}");
+                                    _logger.Log(Name, $"Removed {candidate}s in col {cellPos1}");
                                     progress = true;
                                 }
                                 if (line2Progress)
                                 {
-                                    Console.WriteLine($"XWing removed {candidate}s in col {cellPos2}");
+                                    _logger.Log(Name, $"Removed {candidate}s in col {cellPos2}");
                                     progress = true;
                                 }                            
                             }

@@ -1,10 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Models;
+using SudokuBrain.Services;
 
 public class SwordfishStrategy : IStrategy
 {
-    public string Name => "Swordfish Strategy";
+    private readonly IMessageLogger _logger;
+
+    public SwordfishStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+    
+    public string Name => "Swordfish";
 
     public int SkillLevel => 9;
 
@@ -87,11 +96,11 @@ public class SwordfishStrategy : IStrategy
                                 // We've found a Swordfish
                                 if (columnsSearch)
                                 {
-                                    Console.WriteLine($"Swordfish? {candidate} in cols {firstLineNum}, {secondLineNum}, {thirdLineNum} rows {allCandidateCells[0]}, {allCandidateCells[1]}, {allCandidateCells[2]}");
+                                    _logger.Log(Name, $"{candidate} in cols {firstLineNum}, {secondLineNum}, {thirdLineNum} rows {allCandidateCells[0]}, {allCandidateCells[1]}, {allCandidateCells[2]}", LogItemLevel.Debug);
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Swordfish? {candidate} in rows {firstLineNum}, {secondLineNum}, {thirdLineNum} cols {allCandidateCells[0]}, {allCandidateCells[1]}, {allCandidateCells[2]}");
+                                    _logger.Log(Name, $"{candidate} in rows {firstLineNum}, {secondLineNum}, {thirdLineNum} cols {allCandidateCells[0]}, {allCandidateCells[1]}, {allCandidateCells[2]}", LogItemLevel.Debug);
                                 }
                                 
                                 // Eliminate any other instances of candidate from the 3 perpendicular lines
@@ -111,17 +120,16 @@ public class SwordfishStrategy : IStrategy
                                     {
                                         foreach (var line in lines)
                                         {
-                                            if (line.GetCell(cell).EliminateCandidate(candidate))
+                                            if (line.GetCell(cell).EliminateCandidate(candidate, Name))
                                             {
                                                 lineProgress.Add(line);
-                                                //Console.WriteLine($"Swordfish works!!!");
                                             }
                                         }
                                     }
                                 }
                                 foreach (var line in lineProgress)
                                 {
-                                    Console.WriteLine($"Swordfish removed {candidate}s in {line.Description}");
+                                    _logger.Log(Name, $"Removed {candidate}s in {line.Description}");
                                     progress = true;
                                 }
                             }

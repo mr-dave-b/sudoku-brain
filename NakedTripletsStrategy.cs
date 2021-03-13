@@ -1,9 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class NakedTripletsStrategy : IStrategy
 {
+    private readonly IMessageLogger _logger;
+
+    public NakedTripletsStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
     public string Name => "Naked Triplets Strategy";
 
     public int SkillLevel => 6;
@@ -24,7 +32,7 @@ public class NakedTripletsStrategy : IStrategy
             group = puzzle.GetBox(num);
             progress = CheckGroup(group) || progress;
         }
-        Console.WriteLine($"Naked triplets: Searched {_searchCombos} group/triplet combos");
+        _logger.Log(Name, $"Searched {_searchCombos} group/triplet combos");
         return progress;
     }
 
@@ -37,7 +45,7 @@ public class NakedTripletsStrategy : IStrategy
         {
             // Iterate all possible triplets
             int combos = Helpers.Factorial(candidatesList.Count) / (Helpers.Factorial(3) * Helpers.Factorial(candidatesList.Count-3));
-            //Console.WriteLine($"Naked triplets: searching in {group.Description} with {combos} triplet combos");
+            // _logger.Log(Name, $"Searching in {group.Description} with {combos} triplet combos");
             _searchCombos += combos;
             for (var i=0; i<candidatesList.Count-2; i++)
             {
@@ -84,7 +92,7 @@ public class NakedTripletsStrategy : IStrategy
                         }
                         if (inCells.Count == 3)
                         {
-                            //Console.WriteLine($"Naked triplet found: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                            _logger.Log(Name, $"Found {candidate1}{candidate2}{candidate3} in {group.Description}", SudokuBrain.Models.LogItemLevel.Debug);
                             var tripleValues = new char[] {candidate1, candidate2, candidate3};
 
                             bool tripletProgress = false;
@@ -106,7 +114,7 @@ public class NakedTripletsStrategy : IStrategy
                             }
                             if (tripletProgress)
                             {
-                                Console.WriteLine($"Naked triplet: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                                _logger.Log(Name, $"{candidate1}{candidate2}{candidate3} in {group.Description}");
                                 progress = true;
                             }
                         }

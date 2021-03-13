@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class Group
 {
         private Cell[] _cells = new Cell[9];
         private string _description;
+        private IMessageLogger _log;
 
-        public Group(Cell[] initialCells, string description)
+        public Group(Cell[] initialCells, string description, IMessageLogger log)
         {
+                _log = log;
                 for (int i = 0; i < 9; i++)
                 {
                         _cells[i] = initialCells[i];
@@ -55,7 +58,7 @@ public class Group
                     {
                             if (placed.Contains(cell.Value))
                             {
-                                    Console.WriteLine($"{cell.Value} filled in more than once in {this.Description}!");
+                                    _log.Log(null, $"{cell.Value} filled in more than once in {this.Description}!", SudokuBrain.Models.LogItemLevel.Problem);
                                     valid = false;
                             }
                         placed.Add(cell.Value);
@@ -74,7 +77,7 @@ public class Group
             }
             if (allNumbers.Count > 0)
             {
-                Console.WriteLine($"{allNumbers.First()} is missing from {this.Description}!");
+                _log.Log(null, $"{allNumbers.First()} is missing from {this.Description}!", SudokuBrain.Models.LogItemLevel.Problem);
                 valid = false;
             }
 

@@ -1,10 +1,18 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using SudokuBrain.Services;
 
 public class BoxLineReductionStrategy : IStrategy
 {
-    public string Name => "Box line reduction strategy";
+    private readonly IMessageLogger _logger;
+
+    public BoxLineReductionStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
+    public string Name => "Box line reduction";
     public int SkillLevel => 4;
 
     // For each row and column, check if all instances of a candidate are in the same box
@@ -111,7 +119,7 @@ public class BoxLineReductionStrategy : IStrategy
                         {
                             // This cell isnt in our column/row - remove the candidate
                             var boxCell = box.GetCell(b);
-                            if (boxCell.EliminateCandidate(candidate))
+                            if (boxCell.EliminateCandidate(candidate, Name))
                             {
                                 boxProgress = true;
                             }
@@ -122,11 +130,11 @@ public class BoxLineReductionStrategy : IStrategy
                         progress = true;
                         if (isColumn)
                         {
-                            Console.WriteLine($"Box line reduction win: {candidate}s all in a column in box {boxNum}");
+                            _logger.Log(Name, $"{candidate}s all in a column in box {boxNum}");
                         }
                         else
                         {
-                            Console.WriteLine($"Box line reduction win: {candidate}s all in a row in box {boxNum}");
+                            _logger.Log(Name, $"{candidate}s all in a row in box {boxNum}");
                         }
                     }
                 }

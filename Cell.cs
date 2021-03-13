@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class Cell
 {
-    public Cell(char initialValue, int row, int col)
+    private IMessageLogger _log;
+
+    public Cell(char initialValue, int row, int col, IMessageLogger log)
     {
+        _log = log;
         Col = col;
         Row = row;
         if (int.TryParse(initialValue.ToString(), out _))
@@ -33,7 +37,7 @@ public class Cell
 
     public HashSet<char> Candidates { get; private set; }
 
-    public bool SetOnlyCandidates(IEnumerable<char> values)
+    public bool SetOnlyCandidates(IEnumerable<char> values, string actor = null)
     {
         if (Filled)
         {
@@ -47,12 +51,12 @@ public class Cell
         }
         if (Candidates.Count == 1)
         {
-            FillIn(Candidates.First());
+            FillIn(Candidates.First(), actor);
         }
         return true;
     }
 
-    public bool EliminateCandidates(IEnumerable<char> values)
+    public bool EliminateCandidates(IEnumerable<char> values, string actor = null)
     {
         bool somethingRemoved = false;
         if (!Filled)
@@ -68,12 +72,12 @@ public class Cell
         }
         if (Candidates.Count == 1)
         {
-            FillIn(Candidates.First());
+            FillIn(Candidates.First(), actor);
         }
         return somethingRemoved;
     }
 
-    public bool EliminateCandidate(char value)
+    public bool EliminateCandidate(char value, string actor = null)
     {
         bool somethingRemoved = false;
         if (!Filled)
@@ -84,18 +88,18 @@ public class Cell
                 somethingRemoved = true;
                 if (Candidates.Count == 1)
                 {
-                    FillIn(Candidates.First());
+                    FillIn(Candidates.First(), actor);
                 }
             }
         }
         return somethingRemoved;
     }
 
-    internal void FillIn(char candidate)
+    public void FillIn(char candidate, string actor = null)
     {
         Filled = true;
         Value = candidate;
         Candidates = null;
-        Console.WriteLine($"Filled in a {candidate} at {Col},{Row}!");
+        _log.Log(actor, $"Filled in a {candidate} at {Col},{Row}!");
     }
 }

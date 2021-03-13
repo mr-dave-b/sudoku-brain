@@ -1,10 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class HiddenQuadsStrategy : IStrategy
 {
     // TODO: This one isn't finished yet!
+
+    private readonly IMessageLogger _logger;
+
+    public HiddenQuadsStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
     public string Name => "Hidden Quads Strategy";
 
     public int SkillLevel => 6;
@@ -45,7 +53,7 @@ public class HiddenQuadsStrategy : IStrategy
         {
             // Iterate all sets of 4 possible candidates
             int combos = Helpers.Factorial(candidates.Count) / (Helpers.Factorial(4) * Helpers.Factorial(candidates.Count-4));
-            Console.WriteLine($"Hidden quads: searching in {group.Description} with {combos} quad combos");
+            _logger.Log(Name, $"Hidden quads: searching in {group.Description} with {combos} quad combos");
             for (var i=0; i<candidatesList.Count-2; i++)
             {
                 var candidate1 = candidatesList[i];
@@ -94,7 +102,7 @@ public class HiddenQuadsStrategy : IStrategy
                         }
                         if (inCells.Count == 3)
                         {
-                            Console.WriteLine($"Triplet found: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                            _logger.Log(Name, $"{candidate1}{candidate2}{candidate3} in {group.Description}");
                             // We found a hidden triplet! Expose it
                             bool exposeProgress = false;
                             var tripleValues = new char[] {candidate1, candidate2, candidate3};
@@ -110,7 +118,7 @@ public class HiddenQuadsStrategy : IStrategy
                             }
                             if (exposeProgress)
                             {
-                                Console.WriteLine($"Triplet exposed: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                                _logger.Log(Name, $"Exposed {candidate1}{candidate2}{candidate3} in {group.Description}", SudokuBrain.Models.LogItemLevel.Debug);
                                 progress = true;
                             }
 
@@ -134,7 +142,7 @@ public class HiddenQuadsStrategy : IStrategy
                             }
                             if (tripletProgress)
                             {
-                                Console.WriteLine($"Triplet helps us: {candidate1}{candidate2}{candidate3} in {group.Description}");
+                                _logger.Log(Name, $"Progress {candidate1}{candidate2}{candidate3} in {group.Description}");
                                 progress = true;
                             }
                         }

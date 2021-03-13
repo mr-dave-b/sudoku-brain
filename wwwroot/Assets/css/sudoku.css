@@ -1,0 +1,14 @@
+
+#console-window {
+    font-family: "Lucida Console", "Courier New", monospace;
+    width: 90%;
+    height: 500px;
+    overflow: scroll;
+    padding: 5px;
+    border:1px dashed #DEBB00;
+}
+
+span.problem {
+    color: red;
+    font-weight: bold;
+}

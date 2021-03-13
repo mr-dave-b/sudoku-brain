@@ -1,8 +1,17 @@
 using System;
 using System.IO;
+using SudokuBrain.Models;
+using SudokuBrain.Services;
 
 public class LoadPuzzle
 {
+    private readonly IMessageLogger _logger;
+
+    public LoadPuzzle(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
     public Puzzle LoadFromInputTxt(string filename)
     {
         Group[] rows = new Group[9];
@@ -18,21 +27,17 @@ public class LoadPuzzle
                     
                     for (int col = 0; col < 9; col++)
                     {
-                        rowCells[col] = new Cell(line[col], row+1, col+1);
+                        rowCells[col] = new Cell(line[col], row+1, col+1, _logger);
                     }
-                    rows[row] = new Group(rowCells, $"row {row+1}");
+                    rows[row] = new Group(rowCells, $"row {row+1}", _logger);
                 }
-                
-                // Read the stream as a string, and write the string to the console.
-                Console.WriteLine(sr.ReadToEnd());
             }
         }
         catch (IOException e)
         {
-            Console.WriteLine("The file could not be read:");
-            Console.WriteLine(e.Message);
-            throw e;
+            _logger.Log("LoadPuzzle", $"The file could not be read: {e.Message}");
+            throw;
         }
-        return new Puzzle(rows);
+        return new Puzzle(rows, _logger);
     }
 }

@@ -1,8 +1,16 @@
 using System;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class NakedPairsStrategy : IStrategy
 {
+    private readonly IMessageLogger _logger;
+
+    public NakedPairsStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
     public string Name => "Naked Pairs Strategy";
 
     public int SkillLevel => 4;
@@ -64,7 +72,7 @@ public class NakedPairsStrategy : IStrategy
                         }
                         if (pairProgress)
                         {
-                            Console.WriteLine($"Naked pairs: {firstCellData.Candidates.First()}{firstCellData.Candidates.Skip(1).First()} in {group.Description} helps us");
+                            _logger.Log(Name, $"{firstCellData.Candidates.First()}{firstCellData.Candidates.Skip(1).First()} in {group.Description} helps us");
                             progress = true;
                         }
                     }

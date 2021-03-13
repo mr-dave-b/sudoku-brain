@@ -1,10 +1,18 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using SudokuBrain.Services;
 
 public class PointingCandidatesStrategy : IStrategy
 {
-    public string Name => "Pointing Pairs/Triples strategy";
+    private readonly IMessageLogger _logger;
+
+    public PointingCandidatesStrategy(IMessageLogger logger)
+    {
+        _logger = logger;
+    }
+
+    public string Name => "Pointing Pairs/Triples";
     public int SkillLevel => 3;
 
     public bool Apply(Puzzle puzzle)
@@ -108,7 +116,7 @@ public class PointingCandidatesStrategy : IStrategy
         }
         if (progress)
         {
-            Console.WriteLine($"Pointing candidates: {candidate}s all in a row in box {boxNum}");
+            _logger.Log(Name, $"{candidate}s all in a row in box {boxNum}");
         }
         return progress;
     }
@@ -132,7 +140,7 @@ public class PointingCandidatesStrategy : IStrategy
         }
         if (progress)
         {
-            Console.WriteLine($"Pointing candidates: {candidate}s all in a col in box {boxNum}");
+            _logger.Log(Name,$"Pointing candidates: {candidate}s all in a col in box {boxNum}");
         }
         return progress;
     }

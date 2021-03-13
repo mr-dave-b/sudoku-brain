@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using SudokuBrain.Services;
 
 public class HiddenSinglesStrategy : IStrategy
 {
-    public string Name => "Hidden Singles Strategy";
+    public string Name => "Hidden Singles";
 
     public int SkillLevel => 2;
     public bool Apply(Puzzle puzzle)
@@ -59,7 +60,7 @@ public class HiddenSinglesStrategy : IStrategy
             if (foundInCell != null)
             {
                 // We have a cell to fill in!
-                foundInCell.FillIn(candidate);
+                foundInCell.FillIn(candidate, Name);
                 progress = true;
             }
         }
