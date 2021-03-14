@@ -18,7 +18,7 @@ namespace SudokuBrain.Controllers
 
             var loader = new LoadPuzzle(model.Log);
 
-            var puzzle = loader.LoadFromInputTxt("input.txt"); // args[0]
+            var puzzle = loader.LoadFromInputTxt("samples/input.txt");
 
             puzzle.WriteGridAsText(model.Log);
 
