@@ -20,10 +20,13 @@ namespace SudokuBrain.Controllers
 
             var puzzle = loader.LoadFromInputTxt("samples/input.txt");
 
-            puzzle.WriteGridAsText(model.Log);
+            model.InitialState = puzzle.Copy();
+            model.Puzzle = puzzle;
+
+            var solver = new PuzzleSolver(model.Log);
 
             int previousNumberFilledIn = puzzle.NumbersFilledIn;
-            while (puzzle.ApplyAllStrats())
+            while (solver.ApplyAllStrats(puzzle))
             {
                 int currentNumberFilledIn = puzzle.NumbersFilledIn;
                 if (currentNumberFilledIn > previousNumberFilledIn)
@@ -36,7 +39,7 @@ namespace SudokuBrain.Controllers
                 }
                 previousNumberFilledIn = currentNumberFilledIn;
             }
-            puzzle.EndSolutionStats(model.Log);
+            solver.EndSolutionStats(puzzle);
 
             // This will be the home screen where you select a sudoku or create one
             return View(model);

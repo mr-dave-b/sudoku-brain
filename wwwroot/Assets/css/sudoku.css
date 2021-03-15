@@ -2,8 +2,10 @@
 #console-window {
     font-family: "Lucida Console", "Courier New", monospace;
     width: 90%;
+    /*
     height: 500px;
     overflow: scroll;
+    */
     padding: 5px;
     border:1px dashed #DEBB00;
 }
@@ -12,3 +14,59 @@ span.problem {
     color: red;
     font-weight: bold;
 }
+
+div.sudoku {
+  border-width: 5px;  
+  border-style: outset;
+  width: 278px;
+  height: 278px;
+}
+div.row {
+  clear: both;
+}
+
+div.cell {
+  height: 30px;
+  width: 30px;
+  float: left;
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  border-color: #888;
+}
+div.cell.col3, div.cell.col6 {
+  border-right-color: #000;
+}
+div.cell.row3, div.cell.row6 {
+  border-bottom-color: #000;
+}
+div.cell.col9 {
+  border-right-width: 0;
+}
+div.cell.row9 {
+  border-bottom-width: 0;
+}
+
+div.cell div.value {
+  font-weight: bold;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+}
+div.cell div.candidates {
+  font-size: small;
+}
+
+/*
+
+#flexContainer {
+    display: block;
+    background-color: blue;
+  }
+  
+  @media only screen and (min-width: 1024px) {
+    #flexContainer {
+      display: flex;
+    }
+  }
+*/

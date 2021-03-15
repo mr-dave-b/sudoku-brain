@@ -19,6 +19,16 @@ public class Group
                 _description = description;
         }
 
+        public Group Copy()
+        {
+                var cells = new Cell[9];
+                for (int c = 0; c < 9; c++)
+                {
+                    cells[c] = _cells[c].Copy();
+                }
+                return new Group(cells, _description, _log);
+        }
+
         public string Description => _description;
 
     public IEnumerable<char> Candidates => _cells.Where(c => !c.Filled).SelectMany(c => c.Candidates).Distinct();

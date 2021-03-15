@@ -4,7 +4,6 @@ using SudokuBrain.Services;
 
 public class Puzzle
 {
-    private readonly List<IStrategy> _strategies;
     private readonly Group[] _allRows = new Group[9];
     private readonly IMessageLogger _logger;
 
@@ -15,20 +14,23 @@ public class Puzzle
             _allRows[i] = initialRows[i];
         }
         _logger = logger;
-        
-        _strategies = new List<IStrategy>
+    }
+
+    public Dictionary<string, int> UsedStrats {get;} = new Dictionary<string, int>();
+
+    public Puzzle Copy()
+    {
+        var rows = new Group[9];
+        for (int r = 0; r < 9; r++)
         {
-            new SimpleElimination(),
-            new HiddenSinglesStrategy(),
-            new PointingCandidatesStrategy(_logger),
-            new BoxLineReductionStrategy(_logger),
-            new NakedPairsStrategy(_logger),
-            new HiddenPairsStrategy(_logger),
-            new NakedTripletsStrategy(_logger),
-            new HiddenTripletsStrategy(_logger),
-            new XWingStrategy(_logger),
-            new SwordfishStrategy(_logger)
-        };
+            rows[r] = _allRows[r].Copy();
+        }
+        var copy = new Puzzle(rows, _logger);
+        foreach (var strat in UsedStrats)
+        {
+            copy.UsedStrats.Add(strat.Key, strat.Value);
+        }
+        return copy;
     }
 
     public Cell GetCell(int column, int row)
@@ -55,48 +57,6 @@ public class Puzzle
         }
     }
 
-    public void EndSolutionStats(IMessageLogger logger)
-    {
-        int difficulty = 0;
-        foreach(var strat in UsedStrats)
-        {
-            difficulty += strat.SkillLevel;
-            logger.Log(null, $"{strat.Name} ({strat.SkillLevel})");
-
-        }
-        if (NumbersFilledIn == 81)
-        {
-            logger.Log(null, $"Difficulty: {difficulty}");
-            logger.Log(null, "All Done :)");
-        }
-        else
-        {
-            logger.Log(null, $"Difficulty: {difficulty}+");
-            logger.Log(null, "Ran out of ideas :/", SudokuBrain.Models.LogItemLevel.Problem);
-        }
-    }
-
-    // Applying strategies until some progress is made, then we should go round again
-    public bool ApplyAllStrats()
-    {
-        foreach (var strat in _strategies)
-        {
-            if (strat.Apply(this))
-            {
-                if (!UsedStrats.Contains(strat))
-                {
-                    UsedStrats.Add(strat);
-                }
-                if (!Validate())
-                {
-                    throw new Exception("Quitting because validation failed");
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
     public bool Validate()
     {
         bool valid = true;
@@ -111,8 +71,6 @@ public class Puzzle
         }
         return valid;
     }
-
-    public List<IStrategy> UsedStrats {get;} = new List<IStrategy>();
 
     public Group GetRow(int row)
     {

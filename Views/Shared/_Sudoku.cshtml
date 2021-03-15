@@ -1,0 +1,29 @@
+@model Puzzle;
+
+<div class="sudoku">
+    @for (int r = 1; r <= 9; r++)
+    {
+        var row = Model.GetRow(r);
+        <div id="row{@r}" class="row">
+            @for (int c = 1; c <= 9; c++)
+            {
+                var cell = row.GetCell(c);
+                <div id="cell@(r)@(c)" class="cell row@(r) col@(c)">
+                    @if (cell.Filled)
+                    {
+                        <div class="value">
+                            @cell.Value
+                        </div>
+                    }
+                    else if (cell.Candidates.Count < 9)
+                    {
+                        <div class="candidates">
+                            @string.Join(' ', cell.Candidates)
+                        </div>
+                    }
+                    <!-- <input type="text" name="cell{@r}{@c}" value="@cell.Value" /> -->
+                </div>
+            }
+        </div>
+    }
+</div>

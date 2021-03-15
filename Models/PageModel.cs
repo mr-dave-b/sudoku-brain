@@ -10,5 +10,8 @@ namespace SudokuBrain.Models
         }
         public string PageTitle { get; set; }
         public MessageLog Log { get; set; }
+
+        public Puzzle InitialState { get; set; }
+        public Puzzle Puzzle { get; set; }
     }
 }

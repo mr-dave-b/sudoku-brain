@@ -2,6 +2,10 @@
 
 <h1>@Model.PageTitle</h1>
 
+@await Html.PartialAsync("_Sudoku", Model.InitialState)
+
 <div id="console-window">
     @Model.Log.RenderLog()
 </div>
+
+@await Html.PartialAsync("_Sudoku", Model.Puzzle)

@@ -7,16 +7,14 @@ public class Cell
 {
     private IMessageLogger _log;
 
-    public Cell(char initialValue, int row, int col, IMessageLogger log)
+    public Cell(char initialValue, int row, int col, IMessageLogger log) : this(row, col, log)
     {
-        _log = log;
-        Col = col;
-        Row = row;
         if (int.TryParse(initialValue.ToString(), out _))
         {
             Value = initialValue;
             Given = true;
             Filled = true;
+            Candidates = null;
         }
         else
         {
@@ -25,15 +23,35 @@ public class Cell
         }
     }
 
-    public bool Given { get; set; }
+    private Cell(int row, int col, IMessageLogger log)
+    {
+        _log = log;
+        Col = col;
+        Row = row;
+    }
 
-    public bool Filled { get; set; }
+    public Cell Copy()
+    {
+        var copy = new Cell(this.Row, this.Col, this._log)
+        {
+            Given = this.Given,
+            Filled = this.Filled,
+            Value = this.Value,
+            Candidates = this.Candidates == null ? null : new HashSet<char>(this.Candidates)
+        };
 
-    public char Value { get; set; }
+        return copy;
+    }
 
-    public int Row { get; private set;}
+    public bool Given { get; private set; }
 
-    public int Col { get; private set;}
+    public bool Filled { get; private set; }
+
+    public char Value { get; private set; }
+
+    public int Row { get; private set; }
+
+    public int Col { get; private set; }
 
     public HashSet<char> Candidates { get; private set; }
 
