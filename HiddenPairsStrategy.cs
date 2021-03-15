@@ -101,7 +101,7 @@ public class HiddenPairsStrategy : IStrategy
                     foreach (var cellNum in inCells)
                     {
                         var cellData = group.GetCell(cellNum);
-                        if (cellData.SetOnlyCandidates(new char[] {candidate1, candidate2}))
+                        if (cellData.SetOnlyCandidates(new char[] {candidate1, candidate2}, Name))
                         {
                             _logger.Log(Name, $"Hidden pairs: hidden pair {candidate1}{candidate2} exposed in {group.Description}");
                             // Re-check all candidates before moving on to the next group

@@ -109,7 +109,7 @@ public class PointingCandidatesStrategy : IStrategy
                 // Skip the 3 cells in the current box
                 continue;
             }
-            if (group.GetCell(colNum).EliminateCandidate(candidate))
+            if (group.GetCell(colNum).EliminateCandidate(candidate, Name))
             {
                 progress = true;
             }
@@ -133,14 +133,14 @@ public class PointingCandidatesStrategy : IStrategy
                 // Skip the 3 cells in the current box
                 continue;
             }
-            if (group.GetCell(rowNum).EliminateCandidate(candidate))
+            if (group.GetCell(rowNum).EliminateCandidate(candidate, Name))
             {
                 progress = true;
             }
         }
         if (progress)
         {
-            _logger.Log(Name,$"Pointing candidates: {candidate}s all in a col in box {boxNum}");
+            _logger.Log(Name,$"{candidate}s all in a col in box {boxNum}");
         }
         return progress;
     }

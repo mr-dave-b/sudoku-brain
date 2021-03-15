@@ -102,7 +102,7 @@ public class HiddenTripletsStrategy : IStrategy
                             foreach (var cellNum in inCells)
                             {
                                 var cellData = group.GetCell(cellNum);
-                                if (cellData.SetOnlyCandidates(tripleValues))
+                                if (cellData.SetOnlyCandidates(tripleValues, Name))
                                 {
                                     exposeProgress = true;
                                 }

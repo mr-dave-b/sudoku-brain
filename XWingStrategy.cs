@@ -12,7 +12,7 @@ public class XWingStrategy : IStrategy
         _logger = logger;
     }
 
-    public string Name => "X-Wing Strategy";
+    public string Name => "X-Wing";
 
     public int SkillLevel => 8;
 
@@ -113,11 +113,11 @@ public class XWingStrategy : IStrategy
                             {
                                 if (cell != firstLineNum && cell != secondLineNum)
                                 {
-                                    if (line1.GetCell(cell).EliminateCandidate(candidate))
+                                    if (line1.GetCell(cell).EliminateCandidate(candidate, Name))
                                     {
                                         line1Progress = true;
                                     }
-                                    if (line2.GetCell(cell).EliminateCandidate(candidate))
+                                    if (line2.GetCell(cell).EliminateCandidate(candidate, Name))
                                     {
                                         line2Progress = true;
                                     }

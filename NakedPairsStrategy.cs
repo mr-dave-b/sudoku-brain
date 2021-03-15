@@ -64,7 +64,7 @@ public class NakedPairsStrategy : IStrategy
                             var cell = group.GetCell(cellNum);
                             if (!cell.Given && !cell.Filled)
                             {
-                                if (cell.EliminateCandidates(firstCellData.Candidates))
+                                if (cell.EliminateCandidates(firstCellData.Candidates, Name))
                                 {
                                     pairProgress = true;
                                 }

@@ -134,7 +134,7 @@ public class HiddenQuadsStrategy : IStrategy
                                 var cell = group.GetCell(cellNum);
                                 if (!cell.Given && !cell.Filled)
                                 {
-                                    if (cell.EliminateCandidates(tripleValues))
+                                    if (cell.EliminateCandidates(tripleValues, Name))
                                     {
                                         tripletProgress = true;
                                     }

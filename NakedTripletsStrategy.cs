@@ -106,7 +106,7 @@ public class NakedTripletsStrategy : IStrategy
                                 var cell = group.GetCell(cellNum);
                                 if (!cell.Filled)
                                 {
-                                    if (cell.EliminateCandidates(tripleValues))
+                                    if (cell.EliminateCandidates(tripleValues, Name))
                                     {
                                         tripletProgress = true;
                                     }

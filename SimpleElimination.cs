@@ -43,7 +43,7 @@ public class SimpleElimination : IStrategy
             var cell = group.GetCell(i);
             if (!cell.Filled)
             {
-                if (cell.EliminateCandidates(filledValues))
+                if (cell.EliminateCandidates(filledValues, Name))
                 {
                     somethingRemoved = true;
                 }

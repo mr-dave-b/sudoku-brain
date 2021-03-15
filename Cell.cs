@@ -55,7 +55,7 @@ public class Cell
 
     public HashSet<char> Candidates { get; private set; }
 
-    public bool SetOnlyCandidates(IEnumerable<char> values, string actor = null)
+    public bool SetOnlyCandidates(IEnumerable<char> values, string actor)
     {
         if (Filled)
         {
@@ -74,7 +74,7 @@ public class Cell
         return true;
     }
 
-    public bool EliminateCandidates(IEnumerable<char> values, string actor = null)
+    public bool EliminateCandidates(IEnumerable<char> values, string actor)
     {
         bool somethingRemoved = false;
         if (!Filled)
@@ -95,7 +95,7 @@ public class Cell
         return somethingRemoved;
     }
 
-    public bool EliminateCandidate(char value, string actor = null)
+    public bool EliminateCandidate(char value, string actor)
     {
         bool somethingRemoved = false;
         if (!Filled)
@@ -113,7 +113,7 @@ public class Cell
         return somethingRemoved;
     }
 
-    public void FillIn(char candidate, string actor = null)
+    public void FillIn(char candidate, string actor)
     {
         Filled = true;
         Value = candidate;
