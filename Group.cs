@@ -40,6 +40,17 @@ public class Group
                 return _cells[cellNum-1];
         }
 
+    public IEnumerable<Cell> Cells
+    {
+            get
+            {
+                foreach (var cell in _cells)
+                {
+                        yield return cell;
+                }
+            }
+    }
+
         public override string ToString()
         {
                 string result = "";

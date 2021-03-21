@@ -1,3 +1,15 @@
+h1 {
+  text-align: center;
+}
+
+div.centre {
+  text-align: center;
+}
+
+span.data-string {
+  font-size: small;
+  font-family: "Lucida Console", "Courier New", monospace;
+}
 
 #console-window {
     font-family: "Lucida Console", "Courier New", monospace;
@@ -20,6 +32,7 @@ div.sudoku {
   border-style: outset;
   width: 278px;
   height: 278px;
+  margin: auto;
 }
 div.row {
   clear: both;
@@ -47,11 +60,15 @@ div.cell.row9 {
 }
 
 div.cell div.value {
+  color: #00d;
   font-weight: bold;
   text-align: center;
   width: 30px;
   height: 30px;
   line-height: 30px;
+}
+div.cell div.value.given {
+  color: #000;
 }
 div.cell div.candidates {
   font-size: small;

@@ -22,7 +22,8 @@ public class PuzzleSolver
             new NakedTripletsStrategy(_logger),
             new HiddenTripletsStrategy(_logger),
             new XWingStrategy(_logger),
-            new SwordfishStrategy(_logger)
+            new SwordfishStrategy(_logger),
+            new YWingStrategy(_logger)
         };
     }
 

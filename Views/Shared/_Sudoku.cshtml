@@ -9,7 +9,13 @@
             {
                 var cell = row.GetCell(c);
                 <div id="cell@(r)@(c)" class="cell row@(r) col@(c)">
-                    @if (cell.Filled)
+                    @if (cell.Given)
+                    {
+                        <div class="value given">
+                            @cell.Value
+                        </div>
+                    }
+                    else if (cell.Filled)
                     {
                         <div class="value">
                             @cell.Value

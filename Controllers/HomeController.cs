@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SudokuBrain.Helpers;
 using SudokuBrain.Models;
 using SudokuBrain.Services;
 
@@ -11,14 +12,22 @@ namespace SudokuBrain.Controllers
 {
     public class HomeController : Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string puzzleId = "input", string puzzleData = null)
         {
+            puzzleId = puzzleId.FormatId();
             var model = new PageModel();
             model.PageTitle = "Sudoku brain test";
-
+            Puzzle puzzle;
             var loader = new LoadPuzzle(model.Log);
 
-            var puzzle = loader.LoadFromInputTxt("samples/input.txt");
+            if (!string.IsNullOrWhiteSpace(puzzleData))
+            {
+                puzzle = loader.LoadFromString(puzzleData);
+            }
+            else
+            {
+                puzzle = loader.LoadFromFile($"samples/{puzzleId}.txt");
+            }
 
             model.InitialState = puzzle.Copy();
             model.Puzzle = puzzle;

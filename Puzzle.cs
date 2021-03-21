@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using SudokuBrain.Services;
 
 public class Puzzle
@@ -124,5 +125,19 @@ public class Puzzle
             logger.Log(null, msg + "|");
         }
         logger.Log(null, "-------------");
+    }
+
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int row = 1; row <= 9; row++)
+        {
+            var rowData = GetRow(row);
+            for (int col = 1; col <= 9; col++)
+            {
+                sb.Append(rowData.GetCell(col).Value);
+            }
+        }
+        return sb.ToString();
     }
 }

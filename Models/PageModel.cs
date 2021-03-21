@@ -13,5 +13,7 @@ namespace SudokuBrain.Models
 
         public Puzzle InitialState { get; set; }
         public Puzzle Puzzle { get; set; }
+
+        public PuzzleMenuModel MenuModel { get; set; }
     }
 }

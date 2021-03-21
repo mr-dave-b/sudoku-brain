@@ -11,8 +11,35 @@ public class LoadPuzzle
     {
         _logger = logger;
     }
+    
+    public Puzzle LoadFromString(string input)
+    {
+        Group[] rows = new Group[9];
+        try
+        {
+            var enumerator = input.GetEnumerator();
+            for (int row = 0; row < 9; row++)
+            {
+                var rowCells = new Cell[9];
+                
+                for (int col = 0; col < 9; col++)
+                {
+                    enumerator.MoveNext();
+                    var current = enumerator.Current;
+                    rowCells[col] = new Cell(current, row+1, col+1, _logger);
+                }
+                rows[row] = new Group(rowCells, $"row {row+1}", _logger);
+            }
+        }
+        catch (IOException e)
+        {
+            _logger.Log("LoadPuzzle", $"Problem reading puzzle data: {e.Message}");
+            throw;
+        }
+        return new Puzzle(rows, _logger);
+    }
 
-    public Puzzle LoadFromInputTxt(string filename)
+    public Puzzle LoadFromFile(string filename)
     {
         Group[] rows = new Group[9];
         try

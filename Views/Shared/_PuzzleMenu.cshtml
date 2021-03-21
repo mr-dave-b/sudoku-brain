@@ -1,0 +1,16 @@
+@model PuzzleMenuModel;
+
+@if (Model?.PuzzleIds != null)
+{
+    <div class="puzzle-menu">
+        <label for="puzzles">Load an interesting puzzle:</label>
+
+        <select name="puzzles" id="puzzles">
+            @foreach (var puzzleId in Model.PuzzleIds)
+            {
+                <option value="@puzzleId">@puzzleId</option>
+            }
+        </select>
+
+    </div>
+}

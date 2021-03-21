@@ -1,3 +1,5 @@
+using System.Linq;
+
 public static class Helpers
 {
     public static int GetRowOffset(int boxNumber)
@@ -34,5 +36,10 @@ public static class Helpers
             result = result * number--;
         }
         return result;
+    }
+
+    public static bool TwoCandidatesWith1Intersection(this Cell cell, Cell hingeCell)
+    {
+        return !cell.Filled && cell.Candidates.Count == 2 && cell.Candidates.Intersect(hingeCell.Candidates).Count() == 1;
     }
 }

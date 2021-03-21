@@ -2,7 +2,14 @@
 
 <h1>@Model.PageTitle</h1>
 
-@await Html.PartialAsync("_Sudoku", Model.InitialState)
+<div class="centre">
+    @await Html.PartialAsync("_PuzzleMenu", Model.MenuModel)
+
+    @await Html.PartialAsync("_Sudoku", Model.InitialState)
+
+    <p>Puzzle data: <span class="data-string">@Model.InitialState.ToString()</span></p>
+
+</div>
 
 <div id="console-window">
     @Model.Log.RenderLog()
