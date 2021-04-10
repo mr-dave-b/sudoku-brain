@@ -1,0 +1,9 @@
+@model PageModel;
+
+<h1>@Model.PageTitle @Model.Puzzle?.Title</h1>
+
+<div class="centre">
+    @await Html.PartialAsync("_PuzzleMenu", Model.Menu)
+</div>
+
+@await Html.PartialAsync("_SudokuEdit", Model.Puzzle)

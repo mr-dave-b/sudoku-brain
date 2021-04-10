@@ -1,13 +1,18 @@
 @model PageModel;
 
-<h1>@Model.PageTitle</h1>
+<h1>@Model.PageTitle @Model.Puzzle?.Title</h1>
 
 <div class="centre">
-    @await Html.PartialAsync("_PuzzleMenu", Model.MenuModel)
+    @await Html.PartialAsync("_PuzzleMenu", Model.Menu)
 
-    @await Html.PartialAsync("_Sudoku", Model.InitialState)
+    @if (Model.InitialState != null)
+    {
+        <p>@Html.Raw(Model.InitialState.Description)</p>
+        
+        @await Html.PartialAsync("_Sudoku", Model.InitialState)
 
-    <p>Puzzle data: <span class="data-string">@Model.InitialState.ToString()</span></p>
+        <p>Puzzle data: <a href="/Edit?data=@(Model.InitialState.ToString())" class="data-string">@Model.InitialState.ToString()</a></p>
+    }
 
 </div>
 

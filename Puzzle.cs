@@ -7,14 +7,16 @@ public class Puzzle
 {
     private readonly Group[] _allRows = new Group[9];
     private readonly IMessageLogger _logger;
+    private PuzzleMetadata _info;
 
-    public Puzzle(Group[] initialRows, IMessageLogger logger)
-    {
+    public Puzzle(Group[] initialRows, IMessageLogger logger, string filename = "", string title = "", string description = "")
+    {        
         for (int i = 0; i < 9; i++)
         {
             _allRows[i] = initialRows[i];
         }
         _logger = logger;
+        _info = new PuzzleMetadata(filename, title, description);
     }
 
     public Dictionary<string, int> UsedStrats {get;} = new Dictionary<string, int>();
@@ -26,7 +28,7 @@ public class Puzzle
         {
             rows[r] = _allRows[r].Copy();
         }
-        var copy = new Puzzle(rows, _logger);
+        var copy = new Puzzle(rows, _logger, FileName, Title, Description);
         foreach (var strat in UsedStrats)
         {
             copy.UsedStrats.Add(strat.Key, strat.Value);
@@ -34,12 +36,18 @@ public class Puzzle
         return copy;
     }
 
+    public string FileName => _info.FileName;
+
+    public string Title => _info.Title;
+
+    public string Description => _info.Description;    
+
     public Cell GetCell(int column, int row)
     {
         return null;
     }
 
-    public int NumbersFilledIn
+    public int CountFilledInCells
     {
         get
         {

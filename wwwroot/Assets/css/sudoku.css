@@ -6,7 +6,7 @@ div.centre {
   text-align: center;
 }
 
-span.data-string {
+.data-string {
   font-size: small;
   font-family: "Lucida Console", "Courier New", monospace;
 }
@@ -72,6 +72,10 @@ div.cell div.value.given {
 }
 div.cell div.candidates {
   font-size: small;
+}
+div.edit input {
+  width: 30px;
+  height: 30px;
 }
 
 /*

@@ -58,7 +58,7 @@ public class PuzzleSolver
             _logger.Log(null, $"{strat.Key}");
 
         }
-        if (puzzle.NumbersFilledIn == 81)
+        if (puzzle.CountFilledInCells == 81)
         {
             _logger.Log(null, $"Difficulty: {difficulty}");
             _logger.Log(null, "All Done :)");

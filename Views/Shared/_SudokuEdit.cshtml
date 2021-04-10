@@ -11,22 +11,16 @@
                 {
                     var cell = row.GetCell(c);
                     <div id="cell@(r)@(c)" class="cell row@(r) col@(c)">
-                        @if (cell.Given)
+                        @if (cell.Filled)
                         {
-                            <div class="value given">
-                                @cell.Value
+                            <div class="edit given">
+                                <input type="number" name="cell{@r}{@c}" value="@cell.Value" min="1" max="9" />
                             </div>
                         }
-                        else if (cell.Filled)
+                        else
                         {
-                            <div class="value">
-                                @cell.Value
-                            </div>
-                        }
-                        else if (cell.Candidates.Count < 9)
-                        {
-                            <div class="candidates">
-                                @string.Join(' ', cell.Candidates)
+                            <div class="edit">
+                                <input type="number" name="cell@(r)@(c)" min="1" max="9">
                             </div>
                         }
                     </div>
