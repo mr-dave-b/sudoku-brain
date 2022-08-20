@@ -113,11 +113,18 @@ public class Cell
         return somethingRemoved;
     }
 
-    public void FillIn(char candidate, string actor)
+    public void FillIn(char candidate, string actor, bool backtrackSolver = false)
     {
         Filled = true;
         Value = candidate;
         Candidates = null;
-        _log.Log(actor, $"Filled in a {candidate} at {Col},{Row}!");
+        if (backtrackSolver)
+        {
+            _log.Log(actor, $"Guessing a {candidate} at {Col},{Row}.");
+        }
+        else
+        {
+            _log.Log(actor, $"Filled in a {candidate} at {Col},{Row}!");
+        }
     }
 }

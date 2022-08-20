@@ -86,6 +86,15 @@ public class Puzzle
         return _allRows[row-1];
     }
 
+    // Updates the grid with that from sourcePuzzle
+    internal void CopyFrom(Puzzle sourcePuzzle)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            _allRows[i] = sourcePuzzle.GetRow(i+1);
+        }
+    }
+
     public Group GetColumn(int column)
     {
         var colCells = new Cell[9];

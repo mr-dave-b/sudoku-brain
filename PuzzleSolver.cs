@@ -23,7 +23,8 @@ public class PuzzleSolver
             new HiddenTripletsStrategy(_logger),
             new XWingStrategy(_logger),
             new SwordfishStrategy(_logger),
-            new YWingStrategy(_logger)
+            new YWingStrategy(_logger),
+            new BackTrackSolve(_logger)
         };
     }
 
