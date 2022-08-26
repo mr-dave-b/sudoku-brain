@@ -41,7 +41,8 @@ public class PuzzleSolver
                 }
                 if (!puzzle.Validate())
                 {
-                    throw new Exception("Quitting because validation failed");
+                    _logger.Log(null, "Quitting because puzzle validation failed :(", SudokuBrain.Models.LogItemLevel.Problem);
+                    return false;
                 }
                 return true;
             }
